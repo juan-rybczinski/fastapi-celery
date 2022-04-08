@@ -1,6 +1,4 @@
-from typing import Optional
-
-from fastapi import Form
+from fastapi import Form, UploadFile, File
 from pydantic import BaseModel, Field
 
 
@@ -14,3 +12,15 @@ class PathIn(BaseModel):
             path: str = Form(...)
     ):
         return cls(path=path)
+
+
+class ImageIn(BaseModel):
+    """ Request model for Image API """
+    img: UploadFile
+
+    @classmethod
+    def as_form(
+            cls,
+            img: UploadFile = File(...)
+    ):
+        return cls(img=img)
