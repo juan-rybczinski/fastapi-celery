@@ -6,3 +6,4 @@ Pillow
 python-multipart
 tensorflow==2.7.0
 uvicorn[standard]
+supervisor

@@ -2,6 +2,7 @@ from datetime import datetime
 import io
 import base64
 
+import uvicorn
 from fastapi import FastAPI, Depends
 
 from models.request import PathIn, ImageIn
@@ -71,3 +72,7 @@ async def predict_by_file_q(image_in: ImageIn = Depends(ImageIn.as_form)):
 def get_timestamp(start: datetime, end: datetime):
     return {"timestamp": end.strftime("%Y-%m-%d %H:%M:%S"),
             "process_time": str(int((end - start).total_seconds() * 1000))}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8002)
