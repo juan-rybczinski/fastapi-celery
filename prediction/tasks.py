@@ -1,10 +1,27 @@
 import base64
 import io
 
-from prediction.worker import app
-from utils.ml import engine, init_model
+from celery.signals import worker_init
+from mine.replayed import util
+from mine.replayed.engine import Detection
 
-init_model()
+from prediction.worker import app
+
+engine = None
+
+
+@worker_init.connect
+def initialize_model(sender=None, conf=None, **kwargs):
+    model_path = util.get_config_data('system', 'model_path')
+
+    global engine
+    engine = Detection(
+        number=model_path.split('/')[-1],
+        path=model_path
+    )
+
+    engine.run_by_path("print_0.jpg")
+    print("Complete model initialization!")
 
 
 @app.task(name="by_path")
